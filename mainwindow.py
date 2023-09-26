@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from .store import Store
 from .settings import SettingsDialog
 from .schematicexport import SchematicExport
@@ -15,6 +16,8 @@ from .helpers import (
     loadBitmapScaled,
 )
 from .fabrication import Fabrication
+=======
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 import json
 import logging
 import os
@@ -28,6 +31,7 @@ import requests
 import webbrowser
 import threading
 from pcbnew import GetBoard, GetBuildVersion, ToMM
+<<<<<<< HEAD
 from pcbnew import LoadBoard
 
 from wx.lib.newevent import NewEvent
@@ -40,6 +44,37 @@ AssignPartsEvent, EVT_ASSIGN_PARTS_EVENT = NewEvent()
 PopulateFootprintListEvent, EVT_POPULATE_FOOTPRINT_LIST_EVENT = NewEvent()
 UpdateSetting, EVT_UPDATE_SETTING = NewEvent()
 
+=======
+
+from .events import (
+    EVT_ASSIGN_PARTS_EVENT,
+    EVT_MESSAGE_EVENT,
+    EVT_POPULATE_FOOTPRINT_LIST_EVENT,
+    EVT_RESET_GAUGE_EVENT,
+    EVT_UPDATE_GAUGE_EVENT,
+    EVT_UPDATE_SETTING,
+)
+from .fabrication import Fabrication
+from .helpers import (
+    PLUGIN_PATH,
+    GetScaleFactor,
+    HighResWxSize,
+    get_footprint_by_ref,
+    getVersion,
+    loadBitmapScaled,
+    loadIconScaled,
+    toggle_exclude_from_bom,
+    toggle_exclude_from_pos,
+)
+from .library import Library, LibraryState
+from .partdetails import PartDetailsDialog
+from .partmapper import PartMapperManagerDialog
+from .partselector import PartSelectorDialog
+from .rotations import RotationManagerDialog
+from .schematicexport import SchematicExport
+from .settings import SettingsDialog
+from .store import Store
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
 logging.getLogger("requests").setLevel(logging.WARNING)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
@@ -63,7 +98,11 @@ ID_COPY_MPN = wx.NewIdRef()
 ID_PASTE_MPN = wx.NewIdRef()
 ID_CONTEXT_MENU_ADD_ROT_BY_PACKAGE = wx.NewIdRef()
 ID_CONTEXT_MENU_ADD_ROT_BY_NAME = wx.NewIdRef()
+<<<<<<< HEAD
 # ID_EXPORT_TO_SCHEMATIC = 16
+=======
+#ID_EXPORT_TO_SCHEMATIC = 16
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
 
 class FootPrintList(wx.dataview.DataViewListCtrl):
@@ -75,9 +114,14 @@ class FootPrintList(wx.dataview.DataViewListCtrl):
             pos=wx.DefaultPosition,
             size=wx.DefaultSize,
             style=wx.dataview.DV_MULTIPLE):
+<<<<<<< HEAD
         wx.dataview.DataViewListCtrl.__init__(
             self, parent, id, pos, size, style)
 
+=======
+        wx.dataview.DataViewListCtrl.__init__(self, parent, id, pos, size, style)
+        
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.SetMinSize(HighResWxSize(mainwindows.window, wx.Size(900, 400)))
         self.idx = self.AppendTextColumn(
             "index",
@@ -163,7 +207,11 @@ class FootPrintList(wx.dataview.DataViewListCtrl):
             align=wx.ALIGN_CENTER,
             flags=wx.dataview.DATAVIEW_COL_RESIZABLE,
         )
+<<<<<<< HEAD
         # table_sizer.Add(self.footprint_list, 20, wx.ALL | wx.EXPAND, 5)
+=======
+        #table_sizer.Add(self.footprint_list, 20, wx.ALL | wx.EXPAND, 5)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.Bind(
             wx.dataview.EVT_DATAVIEW_COLUMN_HEADER_CLICK, mainwindows.OnSortFootprintList
         )
@@ -173,11 +221,16 @@ class FootPrintList(wx.dataview.DataViewListCtrl):
         self.Bind(
             wx.dataview.EVT_DATAVIEW_ITEM_CONTEXT_MENU, mainwindows.OnRightDown
         )
+<<<<<<< HEAD
         self.Bind(wx.dataview.EVT_DATAVIEW_ITEM_ACTIVATED,
                   mainwindows.get_part_details)
         self.Bind(wx.dataview.EVT_DATAVIEW_ITEM_VALUE_CHANGED,
                   mainwindows.toggle_update_to_db)
 
+=======
+        self.Bind(wx.dataview.EVT_DATAVIEW_ITEM_ACTIVATED, mainwindows.get_part_details)
+        self.Bind(wx.dataview.EVT_DATAVIEW_ITEM_VALUE_CHANGED, mainwindows.toggle_update_to_db)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
 class NextPCBTools(wx.Dialog):
     def __init__(self, parent):
@@ -196,9 +249,14 @@ class NextPCBTools(wx.Dialog):
         self.window = wx.GetTopLevelParent(self)
         self.SetSize(HighResWxSize(self.window, wx.Size(1400, 800)))
         self.scale_factor = GetScaleFactor(self.window)
+<<<<<<< HEAD
 
         self.project_path = os.path.split(BOARD_LOADED.GetFileName())[0]
         self.board_name = os.path.split(BOARD_LOADED.GetFileName())[1]
+=======
+        self.project_path = os.path.split(GetBoard().GetFileName())[0]
+        self.board_name = os.path.split(GetBoard().GetFileName())[1]
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.schematic_name = f"{self.board_name.split('.')[0]}.kicad_sch"
         self.hide_bom_parts = False
         self.hide_pos_parts = False
@@ -217,8 +275,12 @@ class NextPCBTools(wx.Dialog):
         quitid = wx.NewId()
         self.Bind(wx.EVT_MENU, self.quit_dialog, id=quitid)
 
+<<<<<<< HEAD
         entries = [wx.AcceleratorEntry(), wx.AcceleratorEntry(),
                    wx.AcceleratorEntry()]
+=======
+        entries = [wx.AcceleratorEntry(), wx.AcceleratorEntry(), wx.AcceleratorEntry()]
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         entries[0].Set(wx.ACCEL_CTRL, ord("W"), quitid)
         entries[1].Set(wx.ACCEL_CTRL, ord("Q"), quitid)
         entries[2].Set(wx.ACCEL_SHIFT, wx.WXK_ESCAPE, quitid)
@@ -237,8 +299,12 @@ class NextPCBTools(wx.Dialog):
             wx.TB_HORIZONTAL | wx.TB_TEXT | wx.TB_HORZ_LAYOUT | wx.TB_NODIVIDER
         )
         self.upper_toolbar.SetToolBitmapSize((24, 24))
+<<<<<<< HEAD
         self.group_label = wx.StaticText(
             self.upper_toolbar, wx.ID_ANY, label=" Group by: ")
+=======
+        self.group_label = wx.StaticText(self.upper_toolbar, wx.ID_ANY, label=" Group by: ")
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
         self.group_label.Wrap(-1)
         self.upper_toolbar.AddControl(self.group_label)
@@ -251,8 +317,13 @@ class NextPCBTools(wx.Dialog):
             self.upper_toolbar,
             ID_GROUP,
             "No Group",
+<<<<<<< HEAD
             wx.DefaultPosition,
             wx.DefaultSize,
+=======
+             wx.DefaultPosition,
+             wx.DefaultSize,
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             group_strategy_value,
             style=wx.CB_DROPDOWN | wx.CB_READONLY
         )
@@ -307,6 +378,7 @@ class NextPCBTools(wx.Dialog):
             "",
             loadBitmapScaled("nextpcb-rotations.png", self.scale_factor),
             "Rotations"
+<<<<<<< HEAD
             # "Manage part rotations",
         )
 
@@ -317,6 +389,18 @@ class NextPCBTools(wx.Dialog):
         # "Mapping"
         # "Import or export part mappings of footprint and MPN",
         # )
+=======
+            #"Manage part rotations",
+        )
+
+        self.mapping_button = self.upper_toolbar.AddTool(
+            ID_MAPPINGS,
+            "",
+            loadBitmapScaled("nextpcb-mapping.png", self.scale_factor),
+            "Mapping"
+            #"Import or export part mappings of footprint and MPN",
+        )
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
         self.settings_button = self.upper_toolbar.AddTool(
             ID_SETTINGS,
@@ -329,6 +413,7 @@ class NextPCBTools(wx.Dialog):
 
         self.Bind(wx.EVT_COMBOBOX, self.group_parts, self.cb_group_strategy)
         self.Bind(wx.EVT_TOOL, self.auto_match_parts, self.auto_match_button)
+<<<<<<< HEAD
         self.Bind(wx.EVT_BUTTON, self.generate_fabrication_data,
                   self.generate_button)
         self.Bind(wx.EVT_BUTTON, self.generate_data_place_order,
@@ -336,6 +421,13 @@ class NextPCBTools(wx.Dialog):
         self.Bind(wx.EVT_TOOL, self.manage_rotations, self.rotation_button)
         # self.Bind(wx.EVT_TOOL, self.manage_mappings, self.mapping_button)
         # self.Bind(wx.EVT_TOOL, self.update_library, self.download_button)
+=======
+        self.Bind(wx.EVT_BUTTON, self.generate_fabrication_data, self.generate_button)
+        self.Bind(wx.EVT_BUTTON, self.generate_data_place_order, self.generate_place_order_button)
+        self.Bind(wx.EVT_TOOL, self.manage_rotations, self.rotation_button)
+        self.Bind(wx.EVT_TOOL, self.manage_mappings, self.mapping_button)
+        #self.Bind(wx.EVT_TOOL, self.update_library, self.download_button)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.Bind(wx.EVT_TOOL, self.manage_settings, self.settings_button)
 
         # ---------------------------------------------------------------------
@@ -349,7 +441,11 @@ class NextPCBTools(wx.Dialog):
             wx.Size(1400, -1),
             wx.TB_HORIZONTAL | wx.TB_TEXT | wx.TB_HORZ_LAYOUT | wx.TB_NODIVIDER
         )
+<<<<<<< HEAD
         # self.down_toolbar.AddStretchableSpace()
+=======
+        #self.down_toolbar.AddStretchableSpace()
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.select_part_button = wx.Button(
             self.down_toolbar,
             ID_MANUAL_MATCH,
@@ -365,7 +461,11 @@ class NextPCBTools(wx.Dialog):
         self.down_toolbar.AddControl(self.select_part_button)
 
         self.down_toolbar.AddSeparator()
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.remove_part_button = wx.Button(
             self.down_toolbar,
             ID_REMOVE_PART,
@@ -375,6 +475,7 @@ class NextPCBTools(wx.Dialog):
         self.down_toolbar.AddControl(self.remove_part_button)
         self.down_toolbar.AddSeparator()
 
+<<<<<<< HEAD
         # self.save_all_button = wx.Button(
         # self.down_toolbar,
         # ID_SAVE_MAPPINGS,
@@ -385,12 +486,30 @@ class NextPCBTools(wx.Dialog):
         self.down_toolbar.SetFocus()
         self.down_toolbar.AddStretchableSpace()
 
+=======
+        self.save_all_button = wx.Button(
+            self.down_toolbar,
+            ID_SAVE_MAPPINGS,
+            " Save Mappings "
+        )
+        self.save_all_button.SetDefault()
+        self.down_toolbar.AddControl(self.save_all_button)
+        self.down_toolbar.SetFocus()
+        self.down_toolbar.AddStretchableSpace()
+        
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.down_toolbar.Realize()
 
         self.Bind(wx.EVT_BUTTON, self.select_part, self.select_part_button)
         self.Bind(wx.EVT_BUTTON, self.remove_part, self.remove_part_button)
+<<<<<<< HEAD
         # self.Bind(wx.EVT_BUTTON, self.save_all_mappings, self.save_all_button)
         # self.Bind(wx.EVT_TOOL, self.export_to_schematic, self.export_schematic_button)
+=======
+        self.Bind(wx.EVT_BUTTON, self.save_all_mappings, self.save_all_button)
+        #self.Bind(wx.EVT_TOOL, self.export_to_schematic, self.export_schematic_button)
+
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
         # ---------------------------------------------------------------------
         # ----------------------- Footprint List ------------------------------
@@ -398,11 +517,17 @@ class NextPCBTools(wx.Dialog):
         table_sizer = wx.BoxSizer(wx.VERTICAL)
         table_sizer.SetMinSize(HighResWxSize(self.window, wx.Size(-1, 600)))
 
+<<<<<<< HEAD
         self.notebook = wx.Notebook(
             self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
         self.first_panel = wx.Panel(
             self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
         # self.m_dataViewListCtrl10 = wx.dataview.DataViewListCtrl( self.first_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+=======
+        self.notebook = wx.Notebook(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0)
+        self.first_panel = wx.Panel(self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        #self.m_dataViewListCtrl10 = wx.dataview.DataViewListCtrl( self.first_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0 )
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.first_panel.Layout()
         self.notebook.AddPage(self.first_panel, "All", True)
         # grid_sizer1 = wx.GridSizer(0, 1, 0, 0)
@@ -417,22 +542,37 @@ class NextPCBTools(wx.Dialog):
         grid_sizer1.Add(self.fplist_all, 20, wx.ALL | wx.EXPAND, 5)
         self.selected_page_index = 0
 
+<<<<<<< HEAD
         self.second_panel = wx.Panel(
             self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
         self.second_panel.Layout()
         self.notebook.AddPage(self.second_panel, "Unmanaged", False)
 
+=======
+        self.second_panel = wx.Panel(self.notebook, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL)
+        self.second_panel.Layout()
+        self.notebook.AddPage(self.second_panel, "Unmanaged", False)
+        
+        
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         grid_sizer2 = wx.GridSizer(0, 1, 0, 0)
         grid_sizer2.Fit(self.second_panel)
         self.second_panel.SetSizer(grid_sizer2)
         self.fplist_unmana = FootPrintList(self.second_panel, self)
         grid_sizer2.Add(self.fplist_unmana, 20, wx.ALL | wx.EXPAND, 5)
 
+<<<<<<< HEAD
         self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED,
                            self.on_notebook_page_changed)
 
         # self.on_notebook_page_changed(wx.EVT_NOTEBOOK_PAGE_CHANGED)
         table_sizer.Add(self.notebook, 20, wx.EXPAND | wx.ALL, 5)
+=======
+        self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.on_notebook_page_changed)
+
+        #self.on_notebook_page_changed(wx.EVT_NOTEBOOK_PAGE_CHANGED)
+        table_sizer.Add(self.notebook, 20, wx.EXPAND |wx.ALL, 5)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
         table_sizer.Add(self.down_toolbar, 1, wx.ALL | wx.EXPAND, 5)
         # ---------------------------------------------------------------------
@@ -462,8 +602,12 @@ class NextPCBTools(wx.Dialog):
         # ---------------------- Main Layout Sizer ----------------------------
         # ---------------------------------------------------------------------
 
+<<<<<<< HEAD
         self.SetSizeHints(HighResWxSize(
             self.window, wx.Size(1000, -1)), wx.DefaultSize)
+=======
+        self.SetSizeHints(HighResWxSize(self.window, wx.Size(1000, -1)), wx.DefaultSize)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         layout = wx.BoxSizer(wx.VERTICAL)
         layout.Add(self.upper_toolbar, 0, wx.ALL | wx.EXPAND, 5)
         layout.Add(table_sizer, 21, wx.ALL | wx.EXPAND, 5)
@@ -482,13 +626,18 @@ class NextPCBTools(wx.Dialog):
         self.Bind(EVT_UPDATE_GAUGE_EVENT, self.update_gauge)
         self.Bind(EVT_MESSAGE_EVENT, self.display_message)
         self.Bind(EVT_ASSIGN_PARTS_EVENT, self.assign_parts)
+<<<<<<< HEAD
         self.Bind(EVT_POPULATE_FOOTPRINT_LIST_EVENT,
                   self.populate_footprint_list)
+=======
+        self.Bind(EVT_POPULATE_FOOTPRINT_LIST_EVENT, self.populate_footprint_list)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.Bind(EVT_UPDATE_SETTING, self.update_settings)
 
         self.enable_toolbar_buttons(False)
 
         self.init_logger()
+<<<<<<< HEAD
         # self.init_library()
         self.on_notebook_page_changed(None)
         self.init_fabrication()
@@ -498,6 +647,17 @@ class NextPCBTools(wx.Dialog):
         # else:
 
         # self.library.create_mapping_table()
+=======
+        self.init_library()
+        self.on_notebook_page_changed(None)
+        self.init_fabrication()
+        if self.library.state == LibraryState.UPDATE_NEEDED:
+            self.library.update()
+        else:
+            self.init_store()
+        self.library.create_mapping_table()
+
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def on_notebook_page_changed(self, e):
         self.selected_page_index = self.notebook.GetSelection()
@@ -516,8 +676,14 @@ class NextPCBTools(wx.Dialog):
             # self.footprint_list = FootPrintList(self.second_panel, self)
             # grid_sizer2.Add(self.footprint_list, 20, wx.ALL | wx.EXPAND, 5)
 
+<<<<<<< HEAD
         # if self.library.state == LibraryState.INITIALIZED:
         self.populate_footprint_list()
+=======
+        if self.library.state == LibraryState.INITIALIZED:
+            self.populate_footprint_list()  
+            
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def quit_dialog(self, e):
         """Destroy dialog on close"""
@@ -530,6 +696,7 @@ class NextPCBTools(wx.Dialog):
 
     def init_store(self):
         """Initialize the store of part assignments"""
+<<<<<<< HEAD
         self.store = Store(self, self.project_path, BOARD_LOADED)
         # if self.library.state == LibraryState.INITIALIZED:
         self.populate_footprint_list()
@@ -537,6 +704,15 @@ class NextPCBTools(wx.Dialog):
     def init_fabrication(self):
         """Initialize the fabrication"""
         self.fabrication = Fabrication(self, BOARD_LOADED)
+=======
+        self.store = Store(self, self.project_path)
+        if self.library.state == LibraryState.INITIALIZED:
+            self.populate_footprint_list()
+
+    def init_fabrication(self):
+        """Initialize the fabrication"""
+        self.fabrication = Fabrication(self)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def reset_gauge(self, e):
         """Initialize the gauge."""
@@ -552,6 +728,10 @@ class NextPCBTools(wx.Dialog):
         if self.group_strategy != self.cb_group_strategy.GetSelection():
             self.group_strategy = self.cb_group_strategy.GetSelection()
             self.populate_footprint_list()
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def get_display_parts(self):
         """ """
@@ -564,6 +744,7 @@ class NextPCBTools(wx.Dialog):
         return parts
 
     def auto_match_parts(self, e):
+<<<<<<< HEAD
         self.upper_toolbar.EnableTool(ID_AUTO_MATCH, False)
         try:
             wx.BeginBusyCursor()
@@ -598,11 +779,27 @@ class NextPCBTools(wx.Dialog):
         finally:
             wx.EndBusyCursor()
             self.upper_toolbar.EnableTool(ID_AUTO_MATCH, True)
+=======
+        #get unmanaged part from UI
+        wx.MessageBox("slot", "Help", style=wx.ICON_INFORMATION)
+        unmanaged_parts = self.get_unmanaged_parts_from_list()
+        #send request, parse rsp
+        self.upper_toolbar.EnableTool(ID_AUTO_MATCH, False)
+        #wx.MessageBox(f"unmanaged_parts:{unmanaged_parts}", "Help", style=wx.ICON_INFORMATION)
+        #for part in unmanaged_parts:  
+        unmanaged_parts = unmanaged_parts[:2]
+        threading.Thread(target=self.bom_match_api_request(unmanaged_parts)).start()
+        
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def get_unmanaged_parts_from_list(self):
         rows = []
         parts = self.store.read_parts_by_group_value_footprint()
+<<<<<<< HEAD
         # wx.MessageBox(f"self.footprint_list.counts:{self.footprint_list.GetItemCount()}", "Help", style=wx.ICON_INFORMATION)
+=======
+        #wx.MessageBox(f"self.footprint_list.counts:{self.footprint_list.GetItemCount()}", "Help", style=wx.ICON_INFORMATION)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         for part in parts:
             ref = part[0]
             val = part[1]
@@ -614,6 +811,7 @@ class NextPCBTools(wx.Dialog):
         return rows
 
     def bom_match_api_request(self, unmanaged_parts):
+<<<<<<< HEAD
 
         start = 0
         batch_size = 5
@@ -715,6 +913,96 @@ class NextPCBTools(wx.Dialog):
                 for reference in references.split(","):
                     # wx.MessageBox(f"reference:{reference}", "Help", style=wx.ICON_INFORMATION)
                     # wx.MessageBox(f"partinfo_list[0]:{partinfo_list[0]}", "Help", style=wx.ICON_INFORMATION)
+=======
+        wx.CallAfter(wx.BeginBusyCursor)
+        #wx.CallAfter(wx.MessageBox(f"unmanaged_parts:{unmanaged_parts}", "Help", style=wx.ICON_INFORMATION))
+        headers = {
+            "Content-Type": "application/json",
+            "number": 1,
+            "system": "hqchip",
+            "vendor": "hqchip",
+            "type": 2,
+            "loss": 1,
+            "match_model": 2,
+            "search_order": "goods_name",
+            "service_type": 3
+        }
+
+        data = {
+            "type": ["localtion", "goods_other_name", "encap"],
+            "list": unmanaged_parts
+        }
+        wx.MessageBox(f"data:{data}", "Help", style=wx.ICON_INFORMATION)
+        params_json = json.dumps(headers, indent=None, ensure_ascii=False)
+        body_json = json.dumps(data, indent=None, ensure_ascii=False)
+
+        wx.MessageBox(f"body_json:{body_json}", "Help", style=wx.ICON_INFORMATION)
+        response = requests.post(
+            "https://uat-bomservice.hqchip.com/v3/match?type=2&system=hqchip&vendor=hqchip&search_order=goods_name&number=1&match_model=2&service_type=3",
+            #headers=params_json,
+            data=body_json
+        )
+        wx.MessageBox(f"response.status_code:{response.status_code}", "Help", style=wx.ICON_INFORMATION)
+        if response.status_code != 200:
+            wx.MessageBox(
+                f"non-OK HTTP response.status code:{response.status_code}", 
+                "Error",
+                style=wx.ICON_ERROR
+            )
+            return
+        
+        data = response.json()
+        wx.MessageBox(f"response.json():{data}", "Help", style=wx.ICON_INFORMATION)
+
+        if data.get("info") != "SUCCESS":
+            wx.MessageBox(
+                "returned match result is not SUCCESS", 
+                "Error",
+                style=wx.ICON_ERROR
+            )
+            return
+        
+        if not data.get("data", {}).get("match", {}):
+            wx.MessageBox(
+                "returned JSON data does not have expected 'match' attribute", 
+                "Error",
+                style=wx.ICON_ERROR
+            )
+            return
+        match_parts = data.get("data", {}).get("match", {})
+        if not match_parts:
+            return
+        key_params = [
+            "ModelName",
+            "BrandName",
+            "Desc",
+            "GoodsId"
+        ]
+        self.matched_list = []
+        for part_info in match_parts.values():
+            temp_list = []
+            temp_dict = {}
+            for k in key_params:
+                temp_list.append(part_info.get("match", {}).get(k, ""))
+            
+            temp_dict[part_info.get("0")] = temp_list
+            self.matched_list.append(temp_dict)
+        
+        wx.CallAfter(wx.EndBusyCursor)
+        #update db
+        wx.CallAfter(self.update_db_after_match)
+        #populate ui
+        wx.CallAfter(self.populate_footprint_list)
+        wx.CallAfter(self.upper_toolbar.EnableTool(ID_AUTO_MATCH, True))
+
+    def update_db_after_match(self):
+        if self.matched_list:
+            for i in self.matched_list:
+                #wx.MessageBox(f"references:{reference}", "Help", style=wx.ICON_INFORMATION)
+                references = self.matched_list[i].key()
+                partinfo_list = self.matched_list[i].get(references, [])
+                for reference in references.split(","):
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
                     self.store.set_lcsc(reference, partinfo_list[0])
                     self.store.set_manufacturer(reference, partinfo_list[1])
                     self.store.set_description(reference, partinfo_list[2])
@@ -723,6 +1011,7 @@ class NextPCBTools(wx.Dialog):
     def generate_fabrication_data(self, e):
         """Generate fabrication data."""
         self.fabrication.fill_zones()
+<<<<<<< HEAD
         # wx.MessageBox("fillzones:", "Help", style=wx.ICON_INFORMATION)
         # layer_selection = self.layer_selection.GetSelection()
         # if layer_selection != 0:
@@ -738,10 +1027,35 @@ class NextPCBTools(wx.Dialog):
         # wx.MessageBox("CPL:", "Help", style=wx.ICON_INFORMATION)
         self.fabrication.generate_bom()
         # wx.MessageBox("BOM:", "Help", style=wx.ICON_INFORMATION)
+=======
+        #wx.MessageBox("fillzones:", "Help", style=wx.ICON_INFORMATION)
+        # layer_selection = self.layer_selection.GetSelection()
+        # if layer_selection != 0:
+            # layer_count = int(self.layer_selection.GetString(layer_selection)[:1])
+        # else:
+            # layer_count = None
+        self.fabrication.generate_geber(None)
+        self.fabrication.generate_excellon()
+        #wx.MessageBox("generate excellon:", "Help", style=wx.ICON_INFORMATION)
+        self.fabrication.zip_gerber_excellon()
+        #wx.MessageBox("zip:", "Help", style=wx.ICON_INFORMATION)
+        self.fabrication.generate_cpl()
+        #wx.MessageBox("CPL:", "Help", style=wx.ICON_INFORMATION)
+        self.fabrication.generate_bom()
+        wx.MessageBox("BOM:", "Help", style=wx.ICON_INFORMATION)
+
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def generate_data_place_order(self, e):
         self.generate_fabrication_data(e)
         self.place_order_request()
+<<<<<<< HEAD
+=======
+        
+    def generate_nextpcb_json(self):
+        pass
+
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def place_order_request(self):
         zipname = f"GERBER-{self.fabrication.filename.split('.')[0]}.zip"
@@ -750,9 +1064,15 @@ class NextPCBTools(wx.Dialog):
         upload_url = "https://www.nextpcb.com/Upfile/kiCadUpFile"
         data = {
             "type": "pcbfile",
+<<<<<<< HEAD
             "bwidth": ToMM(BOARD_LOADED.GetBoardEdgesBoundingBox().GetWidth()),
             "blength": ToMM(BOARD_LOADED.GetBoardEdgesBoundingBox().GetHeight()),
             "blayer": BOARD_LOADED.GetCopperLayerCount() if hasattr(BOARD_LOADED, 'GetCopperLayerCount') else ""
+=======
+            "bwidth": ToMM(GetBoard().GetBoardEdgesBoundingBox().GetWidth()),
+            "blength": ToMM(GetBoard().GetBoardEdgesBoundingBox().GetHeight()),
+            "blayer": GetBoard().GetCopperLayerCount() if hasattr(GetBoard(), 'GetCopperLayerCount') else ""
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         }
         rsp = requests.post(
             upload_url,
@@ -764,15 +1084,26 @@ class NextPCBTools(wx.Dialog):
 
     def assign_parts(self, e):
         """Assign a selected LCSC number to parts"""
+<<<<<<< HEAD
         # wx.MessageBox(f"e.references:{e.references}", "Help", style=wx.ICON_INFORMATION)
         for reference in e.references:
             # wx.MessageBox(f"references:{reference}", "Help", style=wx.ICON_INFORMATION)
+=======
+        #wx.MessageBox(f"e.references:{e.references}", "Help", style=wx.ICON_INFORMATION)
+        for reference in e.references:
+            #wx.MessageBox(f"references:{reference}", "Help", style=wx.ICON_INFORMATION)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             self.store.set_lcsc(reference, e.mpn)
             self.store.set_manufacturer(reference, e.manufacturer)
             self.store.set_description(reference, e.description)
             self.store.set_stock_id(reference, e.stock_id)
+<<<<<<< HEAD
             # wx.MessageBox(f"e.stock_id:{e.stock_id}", "Help", style=wx.ICON_INFORMATION)
 
+=======
+            #wx.MessageBox(f"e.stock_id:{e.stock_id}", "Help", style=wx.ICON_INFORMATION)
+        
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.populate_footprint_list()
 
     def display_message(self, e):
@@ -782,8 +1113,12 @@ class NextPCBTools(wx.Dialog):
             "warning": wx.ICON_WARNING,
             "error": wx.ICON_ERROR,
         }
+<<<<<<< HEAD
         wx.MessageBox(e.text, e.title, style=styles.get(
             e.style, wx.ICON_INFORMATION))
+=======
+        wx.MessageBox(e.text, e.title, style=styles.get(e.style, wx.ICON_INFORMATION))
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def populate_footprint_list(self, e=None):
         """Populate/Refresh list of footprints."""
@@ -791,6 +1126,7 @@ class NextPCBTools(wx.Dialog):
             self.init_store()
         self.footprint_list.DeleteAllItems()
         # icons = {
+<<<<<<< HEAD
         # 0: wx.dataview.DataViewIconText(
         # "",
         # loadIconScaled(
@@ -812,6 +1148,29 @@ class NextPCBTools(wx.Dialog):
         # self.scale_factor,
         # ),
         # ),
+=======
+            # 0: wx.dataview.DataViewIconText(
+                # "",
+                # loadIconScaled(
+                    # "nextpcb-checkced.png",
+                    # self.scale_factor,
+                # ),
+            # ),
+            # 1: wx.dataview.DataViewIconText(
+                # "",
+                # loadIconScaled(
+                    # "nextpcb-uncheck.png",
+                    # self.scale_factor,
+                # ),
+            # ),
+            # 2: wx.dataview.DataViewIconText(
+                # "",
+                # loadIconScaled(
+                    # "nextpcb-disablecheck.png",
+                    # self.scale_factor,
+                # ),
+            # ),
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         # }
         toogles_dict = {
             0: False,
@@ -823,7 +1182,11 @@ class NextPCBTools(wx.Dialog):
         parts = []
         display_parts = self.get_display_parts()
         for part in display_parts:
+<<<<<<< HEAD
             fp = get_footprint_by_ref(BOARD_LOADED, (part[0].split(","))[0])[0]
+=======
+            fp = get_footprint_by_ref(GetBoard(), (part[0].split(","))[0])[0]
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             if part[3] and part[3] not in numbers:
                 numbers.append(part[3])
             if ',' in part[0]:
@@ -832,22 +1195,35 @@ class NextPCBTools(wx.Dialog):
                 part[6] = 0 if '0' in part[6].split(",") else 1
                 part[7] = 0 if '0' in part[7].split(",") else 1
                 part[8] = ''
+<<<<<<< HEAD
                 part[9] = "T/B" if ('top' in part[9]) and ('bottom' in part[9]
                                                            ) else (part[9].split(','))[0]
+=======
+                part[9] = "T/B" if ',' in part[9] else part[9]
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             part[6] = toogles_dict.get(part[6], toogles_dict.get(1))
             part[7] = toogles_dict.get(part[7], toogles_dict.get(1))
             if ',' not in part[0]:
                 side = "top" if fp.GetLayer() == 0 else "bottom"
+<<<<<<< HEAD
                 self.store.set_part_side(part[0], side)
                 part[9] = side
             part.insert(10, "")
             parts.append(part)
         # details = self.library.get_part_details(numbers)
         # corrections = self.library.get_all_correction_data()
+=======
+                part[9] = side
+            part.insert(10, "")
+            parts.append(part)
+        #details = self.library.get_part_details(numbers)
+        #corrections = self.library.get_all_correction_data()
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         # find rotation correction values
         for idx, part in enumerate(parts, start=1):
             # detail = list(filter(lambda x: x[0] == part[3], details))
             # if detail:
+<<<<<<< HEAD
             # part[4] = detail[0][2]
             # part[5] = detail[0][1]
             # First check if the part name mathes
@@ -862,6 +1238,22 @@ class NextPCBTools(wx.Dialog):
             # part[8] = correction
             # break
 
+=======
+                # part[4] = detail[0][2]
+                # part[5] = detail[0][1]
+            ##First check if the part name mathes
+            # for regex, correction in corrections:
+                # if re.search(regex, str(part[1])):
+                    # part[8] = correction
+                    # break
+            ##If there was no match for the part name, check if the package matches
+            # if part[8] == "":
+                # for regex, correction in corrections:
+                    # if re.search(regex, str(part[2])):
+                        # part[8] = correction
+                        # break
+            
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             part.insert(0, f'{idx}')
             if self.selected_page_index == 1 and part[4]:
                 continue
@@ -940,8 +1332,12 @@ class NextPCBTools(wx.Dialog):
 
     def OnFootprintSelected(self, e):
         """Enable the toolbar buttons when a selection was made."""
+<<<<<<< HEAD
         self.enable_toolbar_buttons(
             self.footprint_list.GetSelectedItemsCount() > 0)
+=======
+        self.enable_toolbar_buttons(self.footprint_list.GetSelectedItemsCount() > 0)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def enable_all_buttons(self, state):
         """Control state of all the buttons"""
@@ -958,7 +1354,11 @@ class NextPCBTools(wx.Dialog):
             ID_ROTATIONS,
             ID_MAPPINGS,
             ID_SETTINGS
+<<<<<<< HEAD
         ):
+=======
+            ):
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             self.upper_toolbar.EnableTool(button, state)
 
     def enable_toolbar_buttons(self, state):
@@ -969,8 +1369,13 @@ class NextPCBTools(wx.Dialog):
             ID_SELECT_SAME_PARTS,
             ID_PART_DETAILS,
             ID_TOGGLE_BOM,
+<<<<<<< HEAD
             ID_TOGGLE_POS
             # ID_SAVE_MAPPINGS
+=======
+            ID_TOGGLE_POS,
+            ID_SAVE_MAPPINGS
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         ):
             self.down_toolbar.EnableTool(button, state)
 
@@ -981,7 +1386,11 @@ class NextPCBTools(wx.Dialog):
             # row = self.footprint_list.ItemToRow(item)
             # selected_rows.append(row)
             # ref = self.footprint_list.GetTextValue(row, 0)
+<<<<<<< HEAD
             # fp = get_footprint_by_ref(BOARD_LOADED, ref)[0]
+=======
+            # fp = get_footprint_by_ref(GetBoard(), ref)[0]
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             # bom = toggle_exclude_from_bom(fp)
             # pos = toggle_exclude_from_pos(fp)
             # self.store.set_bom(ref, bom)
@@ -993,17 +1402,29 @@ class NextPCBTools(wx.Dialog):
     def toggle_bom(self, e):
         """Toggle the exclude from BOM attribute of a footprint."""
         selected_rows = []
+<<<<<<< HEAD
         # self.logger.debug("toggle bom")
+=======
+        #self.logger.debug("toggle bom")
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         for item in self.footprint_list.GetSelections():
             row = self.footprint_list.ItemToRow(item)
             selected_rows.append(row)
             refs = self.footprint_list.GetTextValue(row, 1).split(",")
             for ref in refs:
+<<<<<<< HEAD
                 # fp = get_footprint_by_ref(BOARD_LOADED, ref)[0]
                 bom = self.footprint_list.GetValue(row, 7)
                 # wx.MessageBox(f"stockID:{bom}", "Help", style=wx.ICON_INFORMATION)
                 self.store.set_bom(ref, bom)
 
+=======
+                #fp = get_footprint_by_ref(GetBoard(), ref)[0]
+                bom = self.footprint_list.GetValue(row, 7)
+                #wx.MessageBox(f"stockID:{bom}", "Help", style=wx.ICON_INFORMATION)
+                self.store.set_bom(ref, bom)
+                
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.populate_footprint_list()
         for row in selected_rows:
             self.footprint_list.SelectRow(row)
@@ -1011,13 +1432,21 @@ class NextPCBTools(wx.Dialog):
     def toggle_pos(self, e):
         """Toggle the exclude from POS attribute of a footprint."""
         selected_rows = []
+<<<<<<< HEAD
         # self.logger.debug("toggle pos")
+=======
+        self.logger.debug("toggle pos")
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         for item in self.footprint_list.GetSelections():
             row = self.footprint_list.ItemToRow(item)
             selected_rows.append(row)
             refs = self.footprint_list.GetTextValue(row, 1).split(",")
             for ref in refs:
+<<<<<<< HEAD
                 # fp = get_footprint_by_ref(BOARD_LOADED, ref)[0]
+=======
+                #fp = get_footprint_by_ref(GetBoard(), ref)[0]
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
                 pos = self.footprint_list.GetValue(row, 8)
                 self.store.set_pos(ref, pos)
         self.populate_footprint_list()
@@ -1029,6 +1458,7 @@ class NextPCBTools(wx.Dialog):
         for item in self.footprint_list.GetSelections():
             row = self.footprint_list.ItemToRow(item)
             ref = self.footprint_list.GetTextValue(row, 1)
+<<<<<<< HEAD
             mpn = self.footprint_list.GetTextValue(row, 4)
             if mpn:
                 for iter_ref in ref.split(","):
@@ -1040,6 +1470,18 @@ class NextPCBTools(wx.Dialog):
                         self.store.set_bom(iter_ref, True)
                         self.store.set_pos(iter_ref, True)
                         self.store.set_stock_id(iter_ref, 0)
+=======
+            for iter_ref in ref.split(","):
+                if iter_ref:
+                    #get_footprint_by_ref(GetBoard(), iter_ref)[0]
+                    self.store.set_lcsc(iter_ref, "")
+                    self.store.set_manufacturer(iter_ref, "")
+                    self.store.set_description(iter_ref, "")
+                    self.store.set_bom(iter_ref, True)
+                    self.store.set_pos(iter_ref, True)
+                    self.store.set_stock(iter_ref, 0)
+                    self.store.set_stock_id(iter_ref, 0)   
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.populate_footprint_list()
 
     def select_alike(self, e):
@@ -1063,6 +1505,7 @@ class NextPCBTools(wx.Dialog):
 
     def get_part_details(self, e):
         """Fetch part details from NextPCB and show them one after another each in a modal."""
+<<<<<<< HEAD
         item = self.footprint_list.GetSelection()
         row = self.footprint_list.ItemToRow(item)
         mpn = self.footprint_list.GetTextValue(row, 4)
@@ -1074,6 +1517,19 @@ class NextPCBTools(wx.Dialog):
             stock_id = self.store.get_stock_id(ref)
             # wx.MessageBox(f"stockID:{stock_id}", "Help", style=wx.ICON_INFORMATION)
             self.show_part_details_dialog(stock_id)
+=======
+        for item in self.footprint_list.GetSelections():
+            row = self.footprint_list.ItemToRow(item)
+            mpn = self.footprint_list.GetTextValue(row, 4)
+            if not mpn:
+                return
+            else:
+                ref = self.footprint_list.GetTextValue(row, 1).split(",")[0]
+                #wx.MessageBox(f"ref:{ref}", "Help", style=wx.ICON_INFORMATION)
+                stock_id = self.store.get_stock_id(ref)
+                #wx.MessageBox(f"stockID:{stock_id}", "Help", style=wx.ICON_INFORMATION)
+                self.show_part_details_dialog(stock_id)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def get_column_by_name(self, column_title_to_find):
         """Lookup a column in our main footprint table by matching its title"""
@@ -1109,11 +1565,19 @@ class NextPCBTools(wx.Dialog):
 
     def show_part_details_dialog(self, stockID):
         if stockID != "":
+<<<<<<< HEAD
             # wx.MessageBox(f"stockID:{stockID}", "Help", style=wx.ICON_INFORMATION)
             try:
                 wx.BeginBusyCursor()
                 # wx.MessageBox(f"stockID:{stockID}", "Help", style=wx.ICON_INFORMATION)
                 PartDetailsDialog(self, int(stockID)).ShowModal()
+=======
+            wx.BeginBusyCursor()
+            try:
+                #wx.MessageBox(f"stockID:{stockID}", "Help", style=wx.ICON_INFORMATION)
+                dialog = PartDetailsDialog(self, int(stockID))
+                dialog.ShowModal()
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             finally:
                 wx.EndBusyCursor()
         else:
@@ -1125,7 +1589,11 @@ class NextPCBTools(wx.Dialog):
         # wx.BeginBusyCursor()
         # try:
             # self.logger.info(f"Opening PartDetailsDialog window for part with value: '{part} (this should be "
+<<<<<<< HEAD
             # f"an LCSC identifier)'")
+=======
+                            # f"an LCSC identifier)'")
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             # dialog = PartDetailsDialog(self, stockID)
             # dialog.ShowModal()
         # finally:
@@ -1174,11 +1642,16 @@ class NextPCBTools(wx.Dialog):
         for item in self.footprint_list.GetSelections():
             row = self.footprint_list.ItemToRow(item)
             reference = (self.footprint_list.GetValue(row, 1).split(","))[0]
+<<<<<<< HEAD
             # self.logger.debug(f"reference, {reference}")
+=======
+            #self.logger.debug(f"reference, {reference}")
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             value = self.footprint_list.GetValue(row, 2)
             fp = self.footprint_list.GetValue(row, 3)
             MPN = self.footprint_list.GetValue(row, 4)
             Manufacturer = self.footprint_list.GetValue(row, 5)
+<<<<<<< HEAD
             selection[reference] = MPN + "," + \
                 Manufacturer + "," + value + "," + fp
         # self.logger.debug(f"Create SQLite table for rotations, {selection}")
@@ -1214,11 +1687,32 @@ class NextPCBTools(wx.Dialog):
 
     def paste_part_lcsc(self, e):
         # wx.MessageBox("copyslot", "Help", style=wx.ICON_INFORMATION)
+=======
+            selection[reference] = MPN + "," + Manufacturer + "," + value + "," + fp
+        # self.logger.debug(f"Create SQLite table for rotations, {selection}")
+        PartSelectorDialog(self, selection).ShowModal()
+
+    def copy_part_lcsc(self, e):
+        """Fetch part details from LCSC and show them in a modal."""
+        for item in self.footprint_list.GetSelections():
+            row = self.footprint_list.ItemToRow(item)
+            if row == -1:
+                return
+            part = self.footprint_list.GetTextValue(row, 4)
+
+            if part != "":
+                if wx.TheClipboard.Open():
+                    wx.TheClipboard.SetData(wx.TextDataObject(part))
+                    wx.TheClipboard.Close()
+
+    def paste_part_lcsc(self, e):
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         text_data = wx.TextDataObject()
         if wx.TheClipboard.Open():
             success = wx.TheClipboard.GetData(text_data)
             wx.TheClipboard.Close()
         if success:
+<<<<<<< HEAD
             lines = text_data.GetText().split('\n')
             # wx.MessageBox(f"lines:{lines}", "Help", style=wx.ICON_INFORMATION)
             mpn = lines[0]
@@ -1238,6 +1732,16 @@ class NextPCBTools(wx.Dialog):
                 self.store.set_stock_id(ref, stock_id)
 
         self.populate_footprint_list()
+=======
+            lcsc = self.sanitize_lcsc(text_data.GetText())
+            if lcsc == "":
+                return
+            for item in self.footprint_list.GetSelections():
+                row = self.footprint_list.ItemToRow(item)
+                reference = self.footprint_list.GetTextValue(row, 1)
+                self.store.set_lcsc(reference, lcsc)
+            self.populate_footprint_list()
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def add_part_rot(self, e):
         for item in self.footprint_list.GetSelections():
@@ -1247,8 +1751,12 @@ class NextPCBTools(wx.Dialog):
             if e.GetId() == ID_CONTEXT_MENU_ADD_ROT_BY_PACKAGE:
                 package = self.footprint_list.GetTextValue(row, 2)
                 if package != "":
+<<<<<<< HEAD
                     RotationManagerDialog(
                         self, "^" + re.escape(package)).ShowModal()
+=======
+                    RotationManagerDialog(self, "^" + re.escape(package)).ShowModal()
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             elif e.GetId() == ID_CONTEXT_MENU_ADD_ROT_BY_NAME:
                 name = self.footprint_list.GetTextValue(row, 1)
                 if name != "":
@@ -1339,6 +1847,7 @@ class NextPCBTools(wx.Dialog):
         conMenu.Append(remove_mpn)
         conMenu.Bind(wx.EVT_MENU, self.remove_part, remove_mpn)
 
+<<<<<<< HEAD
         part_detail = wx.MenuItem(
             conMenu, ID_PART_DETAILS, "Show Part Details")
         conMenu.Append(part_detail)
@@ -1367,6 +1876,25 @@ class NextPCBTools(wx.Dialog):
                 ID_PART_DETAILS
             ):
                 conMenu.Enable(menu_item, state)
+=======
+        part_detail = wx.MenuItem(conMenu, ID_PART_DETAILS, "Show Part Details")
+        conMenu.Append(part_detail)
+        conMenu.Bind(wx.EVT_MENU, self.get_part_details, part_detail)
+
+        item = self.footprint_list.GetSelection()
+        row = self.footprint_list.ItemToRow(item)
+        if row == -1:
+            return
+        mpn = self.footprint_list.GetTextValue(row, 4)
+        state = False if not mpn else True
+        
+        for menu_item in (
+            ID_COPY_MPN,
+            ID_REMOVE_PART,
+            ID_PART_DETAILS
+            ):
+            conMenu.Enable(menu_item, state)
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.footprint_list.PopupMenu(conMenu)
         conMenu.Destroy()  # destroy to avoid memory leak
 
@@ -1420,7 +1948,11 @@ class LogBoxHandler(logging.StreamHandler):
 
 
 # app = wx.App(0)
+<<<<<<< HEAD
 #
+=======
+# 
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 # frame = NextPCBTools(None)
 # app.SetTopWindow(frame)
 # frame.Show()

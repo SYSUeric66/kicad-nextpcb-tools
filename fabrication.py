@@ -35,10 +35,17 @@ from .helpers import get_exclude_from_pos, get_footprint_by_ref, get_smd, is_nig
 
 
 class Fabrication:
+<<<<<<< HEAD
     def __init__(self, parent ,board):
         self.parent = parent
         self.logger = logging.getLogger(__name__)
         self.board = board
+=======
+    def __init__(self, parent):
+        self.parent = parent
+        self.logger = logging.getLogger(__name__)
+        self.board = GetBoard()
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         self.corrections = []
         self.path, self.filename = os.path.split(self.board.GetFileName())
         self.create_folders()
@@ -52,11 +59,19 @@ class Fabrication:
 
     def fill_zones(self):
         """Refill copper zones following user prompt."""
+<<<<<<< HEAD
         if self.parent.settings.get("gerber", {}).get("fill_zones", True):
             filler = ZONE_FILLER(self.board)
             zones = self.board.Zones()
             filler.Fill(zones)
             Refresh()
+=======
+        #if self.parent.settings.get("gerber", {}).get("fill_zones", True):
+        filler = ZONE_FILLER(self.board)
+        zones = self.board.Zones()
+        filler.Fill(zones)
+        Refresh()
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
     def fix_rotation(self, footprint):
         """Fix the rotation of footprints in order to be correct for JLCPCB."""
@@ -262,7 +277,11 @@ class Fabrication:
     def generate_cpl(self):
         """Generate placement file (CPL)."""
         cplname = f"CPL-{self.filename.split('.')[0]}.csv"
+<<<<<<< HEAD
         #self.corrections = self.parent.library.get_all_correction_data()
+=======
+        self.corrections = self.parent.library.get_all_correction_data()
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         aux_orgin = self.board.GetDesignSettings().GetAuxOrigin()
         with open(
             os.path.join(self.outputdir, cplname), "w", newline="", encoding="utf-8"
@@ -283,8 +302,12 @@ class Fabrication:
                             part[2],
                             ToMM(position.x),
                             ToMM(position.y) * -1,
+<<<<<<< HEAD
                             '',
                             #self.fix_rotation(fp),
+=======
+                            self.fix_rotation(fp),
+>>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
                             "top" if fp.GetLayer() == 0 else "bottom",
                         ]
                     )
