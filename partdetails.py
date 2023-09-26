@@ -4,7 +4,6 @@ import webbrowser
 import json
 import requests
 import wx
-<<<<<<< HEAD
 from requests.exceptions import Timeout
 
 from .helpers import HighResWxSize, loadBitmapScaled
@@ -27,11 +26,6 @@ from .debug import Print
     # def ActivateCell(self, cell, model, item):
         # url = item.GetValue()  
         # webbrowser.open(url)  
-=======
-
-from .helpers import HighResWxSize, loadBitmapScaled
-
->>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
 
 class PartDetailsDialog(wx.Dialog):
     def __init__(self, parent, stockID):
@@ -137,7 +131,6 @@ class PartDetailsDialog(wx.Dialog):
 
     def quit_dialog(self, e):
         self.Destroy()
-<<<<<<< HEAD
         self.EndModal(wx.ID_OK)
 
     def on_open_pdf(self, e):
@@ -159,20 +152,6 @@ class PartDetailsDialog(wx.Dialog):
         #content = requests.get(url).content
         io_bytes = io.BytesIO(content)
         image = wx.Image(io_bytes, type=wx.BITMAP_TYPE_ANY)
-=======
-        self.EndModal(0)
-
-    def openpdf(self, e):
-        """Open the linked datasheet PDF on button click."""
-        self.logger.info("opening %s", str(self.pdfurl))
-        webbrowser.open(self.pdfurl)
-
-    def get_scaled_bitmap(self, url, width, height):
-        """Download a picture from a URL and convert it into a wx Bitmap"""
-        content = requests.get(url).content
-        io_bytes = io.BytesIO(content)
-        image = wx.Image(io_bytes)
->>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         image = image.Scale(width, height, wx.IMAGE_QUALITY_HIGH)
         result = wx.Bitmap(image)
         return result
@@ -186,7 +165,6 @@ class PartDetailsDialog(wx.Dialog):
             "stockId": self.stockID
         }
         body_json = json.dumps(body, indent=None, ensure_ascii=False)
-<<<<<<< HEAD
         try:
             response = requests.post(
                 "https://edaapi.nextpcb.com/edapluginsapi/v1/stock/detail",
@@ -201,13 +179,6 @@ class PartDetailsDialog(wx.Dialog):
             self.Destroy()
             self.EndModal(wx.ID_OK)
 
-=======
-        response = requests.post(
-            "https://uat-edaapi.nextpcb.com/edapluginsapi/v1/stock/detail",
-            headers=headers,
-            data=body_json
-        )
->>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
         if response.status_code != 200:
             self.report_part_data_fetch_error("non-OK HTTP response status")
 
@@ -267,7 +238,6 @@ class PartDetailsDialog(wx.Dialog):
                 self.pdfurl,
             ]
         )
-<<<<<<< HEAD
         self.data_list.Bind(wx.dataview.EVT_DATAVIEW_ITEM_ACTIVATED, self.on_open_pdf)
         
         #renderer = URLRenderer()
@@ -281,14 +251,6 @@ class PartDetailsDialog(wx.Dialog):
             #webbrowser.open(picture)
             #Print(self, str(picture)).ShowModal()
             
-=======
-        picture = self.info.get("goodsImage", [])[0]
-        #wx.MessageBox(f"self.pdfurl{self.pdfurl}", "Help", style=wx.ICON_INFORMATION)
-        #wx.MessageBox(f"picture{picture}", "Help", style=wx.ICON_INFORMATION)
-        if picture:
-            # get the full resolution image instead of the thumbnail
-            picture = "https:" + picture
->>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
             self.image.SetBitmap(
                 self.get_scaled_bitmap(
                     picture,
@@ -297,14 +259,11 @@ class PartDetailsDialog(wx.Dialog):
                 )
             )
 
-<<<<<<< HEAD
     # def on_datasheet_pdf(self):
         # item = self.data_list.GetSelection()
         # row = self.data_list.ItemToRow(item)
         # pdf_url = self.data_list.GetTextValue(row, 1)
 
-=======
->>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
     def report_part_data_fetch_error(self, reason):
         wx.MessageBox(
             f"Failed to download part detail from the NextPCB API ({reason})\r\n"
@@ -312,10 +271,6 @@ class PartDetailsDialog(wx.Dialog):
             "Error",
             style=wx.ICON_ERROR,
         )
-<<<<<<< HEAD
         self.Destroy()
         self.EndModal(wx.ID_OK)
         #self.EndModal(-1)
-=======
-        self.EndModal(-1)
->>>>>>> 8c28854a5b5a1b75a5564260e35eb43f135b6937
