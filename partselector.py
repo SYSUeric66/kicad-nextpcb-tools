@@ -363,9 +363,7 @@ class PartSelectorDialog(wx.Dialog):
         prev_button.Bind(wx.EVT_BUTTON, self.on_prev_page)
         next_button.Bind(wx.EVT_BUTTON, self.on_next_page)
 
-        # 初始化当前页和总页数
-        #self.current_page = 1
-        #self.total_pages = 20
+        # 更新当前页和总页数
         self.update_page_label()
 
 
