@@ -331,18 +331,14 @@ class PartSelectorDialog(wx.Dialog):
 
         # Create a font with your desired attributes (size, style, weight)
         font = wx.Font(14, wx.DEFAULT, wx.FONTSTYLE_NORMAL, wx.NORMAL)
-        # Create a wx.Panel as a container with a specific size (70, 60)
         container = wx.Panel(self.previous_next_panel, size=(50, 24))
-        # Create a StaticText widget and set the font
         self.page_label = wx.StaticText(container, label="1/20", style=wx.ALIGN_CENTER)
         self.page_label.SetFont(font)
-        # Create a sizer for the container (wx.Panel)
         container_sizer = wx.BoxSizer(wx.VERTICAL)
         container_sizer.AddStretchSpacer(1)  # Add space at the top to push the text to the bottom
         container_sizer.Add(self.page_label, 0, wx.ALIGN_CENTER)  # Center-align the text
         # Set the container's sizer
         container.SetSizer(container_sizer)
-        # Add the container to the main sizer
         sizer.Add(container, 0, wx.ALL, 5)
         next_button = wx.Button(self.previous_next_panel, label="Next",size=(70, 26))
         sizer.Add(next_button, 0, wx.ALL, 5)
@@ -363,9 +359,7 @@ class PartSelectorDialog(wx.Dialog):
         prev_button.Bind(wx.EVT_BUTTON, self.on_prev_page)
         next_button.Bind(wx.EVT_BUTTON, self.on_next_page)
 
-        # 初始化当前页和总页数
-        #self.current_page = 1
-        #self.total_pages = 20
+        # 更新当前页和总页数
         self.update_page_label()
 
 
