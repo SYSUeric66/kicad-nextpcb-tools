@@ -197,6 +197,8 @@ class PartSelectorDialog(wx.Dialog):
         self.search_part_list = []
         data = response.json()
         self.total_num = len(data)
+        if self.total_num == 0:
+            self.current_page = 0 
         for item in data:
             if not item.get("_source", {}):
                 self.report_part_search_error(

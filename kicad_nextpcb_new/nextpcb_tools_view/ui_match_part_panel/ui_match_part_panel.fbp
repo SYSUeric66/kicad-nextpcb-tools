@@ -59,6 +59,8 @@
                 <property name="permission">none</property>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
+<<<<<<< HEAD
+=======
                     <property name="flag">wxEXPAND | wxALL</property>
                     <property name="proportion">1</property>
                     <object class="wxNotebook" expanded="1">
@@ -232,6 +234,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">5</property>
+>>>>>>> bb0e94308a459761c3c48459c39423c1f983a0e7
                     <property name="flag">wxEXPAND</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">

@@ -75,14 +75,11 @@ def natural_sort_collation(a, b):
     if a == b:
         return 0
 
-    def convert(text):
-        return int(text) if text.isdigit() else text.lower()
-
-    def alphanum_key(key):
-        return [convert(c) for c in re.split("([0-9]+)", key)]
-
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
     natorder = sorted([a, b], key=alphanum_key)
     return -1 if natorder.index(a) == 0 else 1
+
 
 
 def get_lcsc_value(fp):

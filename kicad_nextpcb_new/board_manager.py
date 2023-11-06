@@ -13,9 +13,6 @@ class BoardManager :
         return self._board
         
 def load_board_manager():
-    for fp in   'C:\\Program Files\\KiCad\\7.0\\share\\kicad\\demos\\ecc83\\ecc83-pp.kicad_pcb',"D:\\KiCad\\7.0\\share\\kicad\\demos\\ecc83\\ecc83-pp.kicad_pcb":
-        if os.path.exists(fp):
-            return LoadBoard(fp)
     #Setup board
     board = GetBoard()
     if board:

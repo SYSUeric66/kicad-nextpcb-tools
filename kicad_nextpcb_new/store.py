@@ -13,6 +13,8 @@ from .helpers import (
     get_valid_footprints,
     natural_sort_collation,
 )
+THRESHOLD = 6
+DECREMENT_AMOUNT = 1
 
 
 class Store:
@@ -41,21 +43,16 @@ class Store:
 
     def set_order_by(self, n):
         """Set which value we want to order by when getting data from the database"""
-        if n > 8:
+        if n > THRESHOLD:
             return
         # The following two cases are just a temporary hack and will eventually be replaced by
         # direct sorting via DataViewListCtrl rather than via SQL query
-        if n == 4:
-            return
-        if n > 4:
-            n = n - 1
+        n = n - DECREMENT_AMOUNT
         order_by = [
             "reference",
             "value",
             "footprint",
             "mpn",
-            "stock",
-            "quantity",
             "bomcheck",
             "poscheck",
         ]
@@ -95,7 +92,7 @@ class Store:
                 return [
                     list(part)
                     for part in cur.execute(
-                       f"SELECT reference, value, footprint,  mpn, manufacturer, description, quantity,\
+                       f"SELECT reference, value, footprint,  mpn, manufacturer, description, 1 as quantity,\
                             bomcheck, poscheck, rotation, side FROM part_info ORDER BY {self.order_by} COLLATE naturalsort {self.order_dir}"
                     ).fetchall()
                 ]
@@ -137,7 +134,7 @@ class Store:
         """Create a part in the database."""
         with contextlib.closing(sqlite3.connect(self.dbfile)) as con:
             with con as cur:
-                cur.execute("INSERT INTO part_info VALUES (?,?,?,?,'','','',?,?,'','',0, '' )", part)
+                cur.execute("INSERT INTO part_info VALUES (?,?,?,?,'','','',?,?,'','','' )", part)
                 cur.commit()
 
     def update_part(self, part):
@@ -147,7 +144,7 @@ class Store:
                 if len(part) == 6:
                     cur.execute(
                         "UPDATE part_info set value = ?, footprint = ?,  mpn = '', manufacturer = '', \
-                        description = '',quantity = 1, bomcheck = ?, poscheck = ?, rotation = '', side = '', part_detail = '' WHERE reference = ?",
+                        description = '',quantity = '', bomcheck = ?, poscheck = ?, rotation = '', side = '', part_detail = '' WHERE reference = ?",
                         part[1:3] + part[4:] + part[0:1],
                     )
                 else:

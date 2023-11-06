@@ -68,6 +68,13 @@ class FootPrintList(wx.dataview.DataViewListCtrl):
             align=wx.ALIGN_CENTER,
             flags=wx.dataview.DATAVIEW_COL_RESIZABLE,
         )
+        self.stock = self.AppendTextColumn(
+            "Quantity",
+            mode=wx.dataview.DATAVIEW_CELL_INERT,
+            width=int(mainwindows.scale_factor * 80),
+            align=wx.ALIGN_CENTER,
+            flags=wx.dataview.DATAVIEW_COL_RESIZABLE,
+        )
         self.bom = self.AppendToggleColumn(
             "BOM",
             mode=wx.dataview.DATAVIEW_CELL_ACTIVATABLE,

@@ -88,7 +88,6 @@ class PartDetailsView(UiPartDetailsPanel):
         for k, v in self.specs_dict.items():
             self.data_list.AppendItem([k, v])
         
-        
         # -------- prefect the following code,according to the interface ------      
         prices_stair = self.info.get("priceStair", [])
         if prices_stair:

@@ -28,7 +28,7 @@ import requests
 import webbrowser
 import threading
 from pcbnew import  GetBuildVersion, ToMM
-from .events import EVT_MESSAGE_EVENT,EVT_ASSIGN_PARTS_EVENT,EVT_POPULATE_FOOTPRINT_LIST_EVENT,EVT_UPDATE_SETTING
+from .events import EVT_MESSAGE_EVENT,EVT_ASSIGN_PARTS_EVENT,EVT_POPULATE_FOOTPRINT_LIST_EVENT,EVT_UPDATE_SETTING,ExportCSV
 
 from kicad_nextpcb_new.nextpcb_tools_view.ui_assigned_part_panel.assigned_part_view import AssignedPartView
 from kicad_nextpcb_new.nextpcb_tools_view.foot_print_list import FootPrintList
@@ -82,7 +82,18 @@ class NextPCBTools(wx.Dialog):
         self.match_part_view =   MatchPartView(self)
         mainwindows = self
         
-
+        # ---------------------------------------------------------------------
+        # ---------------------------- events --------------------------------
+        # ---------------------------------------------------------------------
+        evt=ExportCSV(
+           BOARD_LOADED = self.BOARD_LOADED,
+           project_path =  self.project_path,
+           board_name= self.board_name
+        )
+        wx.PostEvent(
+            self,
+            evt
+        )
         # ---------------------------------------------------------------------
         # ---------------------------- Hotkeys --------------------------------
         # ---------------------------------------------------------------------
@@ -553,35 +564,36 @@ class NextPCBTools(wx.Dialog):
         display_parts = self.get_display_parts()
         for part in display_parts:
             fp = get_footprint_by_ref(self.BOARD_LOADED, (part[0].split(","))[0])[0]
+            #---Get rid of hardcoded numbers and so on and replace them with macros or key-value pairs--
             if part[3] and part[3] not in numbers:
                 numbers.append(part[3])
             if ',' in part[0]:
                 part[4] = (part[4].split(","))[0]
                 part[5] = (part[5].split(","))[0]
-                part[5] = part[6]
-                part[6] = 0 if '0' in part[7].split(",") else 1
-                part[7] = 0 if '0' in part[8].split(",") else 1
-                part[8] = ''
-                part[9] = "T/B" if ('top' in part[10]) and ('bottom' in part[9]
+                part[6] = part[6]
+                part[7] = 0 if '0' in part[7].split(",") else 1
+                part[8] = 0 if '0' in part[8].split(",") else 1
+                part[9] = ''
+                part[10] = "T/B" if ('top' in part[10]) and ('bottom' in part[9]
                                                            ) else (part[9].split(','))[0]
-            part[6] = toogles_dict.get(part[7], toogles_dict.get(1))
-            part[7] = toogles_dict.get(part[8], toogles_dict.get(1))
+            part[7] = toogles_dict.get(part[7], toogles_dict.get(1))
+            part[8] = toogles_dict.get(part[8], toogles_dict.get(1))
             if ',' not in part[0]:
                 side = "top" if fp.GetLayer() == 0 else "bottom"
                 self.store.set_part_side(part[0], side)
-                part[9] = side
-            part.insert(10, "")
+                part[10] = side
+            part.insert(11, "")
             parts.append(part)
         for idx, part in enumerate(parts, start=1):
             part.insert(0, f'{idx}')
-            # part[7] = str(part[7])
+            part[7] = str(part[7])
             if self.selected_page_index == 1 and part[4]:
                 continue
             self.listsd= self.footprint_list.AppendItem(part)
 
     def OnSortFootprintList(self, e):
         """Set order_by to the clicked column and trigger list refresh."""
-        self.store.set_order_by(e.GetColumn())
+        self.oeder= self.store.set_order_by(e.GetColumn())
         self.populate_footprint_list()
 
 
